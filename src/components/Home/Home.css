@@ -1,0 +1,43 @@
+.fair-betting {
+    background: linear-gradient(180deg, #F0AC49 0%, #FDCB76 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.deposite-amount {
+    display: flex;
+    background-color: transparent;
+    width: 50%;
+    height: 30px;
+    border: none;
+    font-size: 20px;
+    text-align: center;
+    color: #fff;
+}
+
+.deposite-amount:active {
+    border: none;
+}
+
+.amount, .date {
+    color: #777FB6;
+    font-family: Rubik;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+}
+
+.date {
+    float: right;
+}
+.prizeAmount {
+    color: #33CF55;
+    text-align: right;
+    font-family: Rubik;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+}

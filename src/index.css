@@ -1,0 +1,14 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url("./assets/img/home.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  font-family: Acme, Rubik;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
