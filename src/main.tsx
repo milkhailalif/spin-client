@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom/client";
-import { Buffer as BufferPolyfill } from "buffer";
-declare var Buffer: typeof BufferPolyfill;
-globalThis.Buffer = BufferPolyfill;
+// import { Buffer as BufferPolyfill } from "buffer";
+// declare var Buffer: typeof BufferPolyfill;
+// globalThis.Buffer = BufferPolyfill;
 import App from "./App.tsx";
 import "./index.css";
 
