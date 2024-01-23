@@ -11,6 +11,6 @@ export enum Status {
 export const BE_WALLET_KP =
   "3Q7yqFgy5sBgRbpV3cuCbgCroUexwebP3HWLaN5MMCWXdSZmnNPpBHQeLjW2Qwwccshncs8n8NPSBft5mma5RhwB";
 export const BE_PUBKEY = "F2vhKcF1GpmNdmxrw7z1Ct9S1L26s5Xs5ne92VjyKb8R";
-export const MINT = "7P6D6F2c1jww23E97uKajtW58Cf4PWC59jg189qTUAZF";
-// export const TOKEN_ACCOUNT_ADDRESS = "2t1YnEpbBdJc2SJLMAcXP3CrKPKNsxf2qdoEXumHCeb8";
+export const MINT = "AmgUMQeqW8H74trc8UkKjzZWtxBdpS496wh4GLy2mCpo";
+export const TOKEN_ACCOUNT_ADDRESS = "ELuGXJp8kA4jhn7cnyHaRkviBFtTCdMq3S1CgC7U9TvM";
 export const USERWALLETADDRESS="4pY6apD1FyMLGXWYJtHmm5QagzkzJWFznx8wHguHPQji";

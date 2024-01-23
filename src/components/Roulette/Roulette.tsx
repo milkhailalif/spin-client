@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
-import DOUBLE from "assets/img/double.png";
+import DOUBLE from "assets/img/double1.png";
 import BURN from "assets/img/burn.png";
 import DRAW from "assets/img/draw.png";
 import BOMB from "assets/img/bomb.png";
@@ -14,7 +14,6 @@ import { Status } from "src/constants/Constants";
 import { useStatusContext } from "src/contexts/useStatusContext";
 import { usePrizeNumberContext } from "src/contexts/usePrizeNumberContext";
 import axios from "axios";
-// import { TokenAmount } from "@solana/web3.js";
 
 const style = {
   position: "absolute",
@@ -47,11 +46,11 @@ const Roulette = ({ tokenAmount, sendToUser, burnToken }: { tokenAmount: any, se
     // Make a request to the backend to access the getRandomInt function
     const fetchRandomNumber = async () => {
       try {
-        const response = await axios.get('http://spin-server.vercel.app/getRandomInt');
+        const response = await axios.get('https://spin-server.vercel.app/getRandomInt');
         setRandomNumber(response.data.result);
 
       } catch (error) {
-        console.log('Error fetching random number:', error);
+        console.error('Error fetching random number:', error);
       }
     };
     fetchRandomNumber();
@@ -70,6 +69,7 @@ const Roulette = ({ tokenAmount, sendToUser, burnToken }: { tokenAmount: any, se
     if (prizeNumber % 4 == 3) {
       burnToken(Number(tokenAmount));
     }
+
   };
 
   const handleDeplayedOpen = () => {

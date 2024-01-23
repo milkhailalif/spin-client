@@ -10,7 +10,6 @@ import {
 import {
   TOKEN_PROGRAM_ID,
   getAssociatedTokenAddress,
-  // createAssociatedTokenAccountInstruction,
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getAccount,
   getOrCreateAssociatedTokenAccount,
@@ -28,23 +27,11 @@ import { BE_PUBKEY, BE_WALLET_KP, MINT, Status } from "src/constants/Constants";
 import TOKENLOGO from "assets/svg/token_logo.svg";
 import INFO from "assets/svg/information-circle.svg";
 // import HISTORY from "assets/svg/calendar.svg";
-// import DOUBLE from "assets/svg/double.svg";
-// import DRAW from "assets/svg/draw.svg";
-// import BURN from "assets/svg/burn.svg";
-// import DEPOSITE from "assets/svg/deposit.svg";
 import CROSS from "assets/svg/cross.svg";
 import Roulette from "../Roulette/Roulette";
 import "react-toastify/dist/ReactToastify.css";
 import "./Home.css";
 import base58 from "bs58";
-
-// interface BettingHistory {
-//   image: string;
-//   bettingResult: string;
-//   bettingAmount: string;
-//   prizeAmount: string;
-//   date: string;
-// }
 
 // const PATTERN = /^[0-9]*[.,]?[0-9]*$/;
 const PLEASECONNECTWALLET = "Wallet is not connected";
@@ -52,36 +39,6 @@ const INPUTDEPOSITEAMOUNT = "Input Deposite Amount";
 const NOTENOUGHBALANCE = "Not Enough Balance";
 const ONCONNECTION = "Wait for Connection!";
 
-// const bettingHistory: BettingHistory[] = [
-//   {
-//     image: DOUBLE,
-//     bettingResult: "Win Double Prize",
-//     bettingAmount: "125",
-//     prizeAmount: "250",
-//     date: "Just now",
-//   },
-//   {
-//     image: DRAW,
-//     bettingResult: "Draw",
-//     bettingAmount: "125",
-//     prizeAmount: "250",
-//     date: "2m ago",
-//   },
-//   {
-//     image: BURN,
-//     bettingResult: "Burn",
-//     bettingAmount: "125",
-//     prizeAmount: "250",
-//     date: "10m ago",
-//   },
-//   {
-//     image: DEPOSITE,
-//     bettingResult: "DEPOSITE",
-//     bettingAmount: "125",
-//     prizeAmount: "250",
-//     date: "10m ago",
-//   },
-// ];
 
 const Home = () => {
   const wallet = useWallet();
@@ -93,7 +50,8 @@ const Home = () => {
   const [tokenAmount, setTokenAmount] = useState<string>("");
   const [helpAnchor, setHelpAnchor] = useState<boolean>(false);
   // const [historyAnchor, setHistoryAnchor] = useState<boolean>(false);
-  // const [mint, setMint] = useState<string>(MINT);
+  // @ts-ignore
+  const [mint, setMint] = useState<string>(MINT);
   // const [tokenAccount, setTokenAccount] = useState("");
   const [isInputDisabled,setIsInputDisabled]=useState<boolean>(false);
 
@@ -172,7 +130,7 @@ const Home = () => {
 
 
   //   const signature = await wallet.sendTransaction(transaction, connection);
-  //   // setTokenAccount(associatedToken.toString());
+  //   setTokenAccount(associatedToken.toString());
 
   //   const tx = await connection.confirmTransaction(signature, "confirmed");
   //   console.log("🚀 ~ createTokenAccount ~ tx:", tx);
@@ -197,13 +155,6 @@ const Home = () => {
   //     new PublicKey(mint),
   //     recipientPubKey
   //   );
-  //   // const associatedToken = await getAssociatedTokenAddress(
-  //   //   mintPubKey,
-  //   //   recipientPubKey,
-  //   //   false,
-  //   //   TOKEN_PROGRAM_ID,
-  //   //   ASSOCIATED_TOKEN_PROGRAM_ID
-  //   // );
   //   console.log(
   //     "🚀 ~ mintToGamTokenAccount ~ associatedToken:",
   //     associatedToken.toString()
@@ -222,7 +173,7 @@ const Home = () => {
 
   //   await connection.confirmTransaction(signature, "confirmed");
 
-  //   // setTokenAccount(associatedToken.toString());
+  //   setTokenAccount(associatedToken.toString());
 
   //   const account = await getAccount(connection, associatedToken.address);
   //   console.log("game token account balance:", Number(account.amount));
@@ -233,7 +184,7 @@ const Home = () => {
    * @dev send amount of reward token to user
    */
   const sendToUser = async (amount: number) => {
-    const mintPubKey = new PublicKey(MINT);
+    const mintPubKey = new PublicKey(mint);
     const gameTokenAccountPk = new PublicKey(BE_PUBKEY);
     const gameKeypair = Keypair.fromSecretKey(base58.decode(BE_WALLET_KP));
     if (!wallet.publicKey) {
@@ -290,7 +241,7 @@ const Home = () => {
   };
 
   const getBalanceOfUserTokenAccount = async () => {
-    const mintPubKey = new PublicKey(MINT);
+    const mintPubKey = new PublicKey(mint);
     const gameKeypair = Keypair.fromSecretKey(base58.decode(BE_WALLET_KP));
     if (!wallet.publicKey) {
       console.log("wallet error");
@@ -312,23 +263,22 @@ const Home = () => {
   }
 
   const depositToken = async (amount: number) => {
-    const mintPubKey = new PublicKey(MINT);
-    const gameTokenAccountPk = new PublicKey(BE_PUBKEY);
+    const mintPubKey = new PublicKey(mint);
+    // const gameTokenAccountPk = new PublicKey(BE_PUBKEY);
     const gameKeypair = Keypair.fromSecretKey(base58.decode(BE_WALLET_KP));
     if (!wallet.publicKey) {
       console.log("wallet error");
       return;
     }
-    const gameTokenAccount = await getAssociatedTokenAddress(
+    const gameTokenAccount = await getOrCreateAssociatedTokenAccount(
+      connection,
+      gameKeypair,
       mintPubKey,
-      gameTokenAccountPk,
-      false,
-      TOKEN_PROGRAM_ID,
-      ASSOCIATED_TOKEN_PROGRAM_ID
+      gameKeypair.publicKey
     );
     console.log(
       "🚀 ~ depositToken ~ gameTokenAccount:",
-      gameTokenAccount.toString()
+      gameTokenAccount.address.toBase58()
     );
 
     const userAccount = await getOrCreateAssociatedTokenAccount(
@@ -351,7 +301,7 @@ const Home = () => {
     tx.add(
       createTransferInstruction(
         userAccount.address,
-        gameTokenAccount,
+        gameTokenAccount.address,
         wallet.publicKey,
         amount * Math.pow(10, mintDecimal)
       )
@@ -369,7 +319,7 @@ const Home = () => {
    */
   const burnToken = async (amount: number) => {
     const gameKeypair = Keypair.fromSecretKey(base58.decode(BE_WALLET_KP));
-    const mintPk = new PublicKey(MINT);
+    const mintPk = new PublicKey(mint);
     const gameOwnerPk = new PublicKey(BE_PUBKEY);
 
     const gameTokenAccount = await getAssociatedTokenAddress(
@@ -510,17 +460,17 @@ const Home = () => {
    * because, it creates temp token,
    * you won't use this function after you make fixed tokens for game
    */
-  // // const createToken = async () => {
+  // const createToken = async () => {
   //   await createMint();
   //   await createTokenAccount();
   //   await mintToGamTokenAccount(1000);
-  // // };
+  // };
 
   return (
     <>
       {/* <button onClick={createToken}>Create Token</button> */}
-      {/* <button onClick={() => depositToken(5)}>to GameWallet</button> */}
-      <button onClick={() => sendToUser(5)}>to User</button>
+      {/* <button onClick={() => depositToken(20)}>to GameWallet</button> */}
+      {/* <button onClick={() => sendToUser(20)}>to User</button> */}
       {/* <button onClick={() => burnToken(5)}>Burn at game wallet</button> */}
       <Grid
         container
@@ -538,7 +488,7 @@ const Home = () => {
           textAlign={"center"}
           className="fair-betting"
         >
-          TOKE WHEEL
+           WHEEL OF TOKE
         </Typography>
         <Grid container justifyContent={"center"}>
           <Roulette tokenAmount={tokenAmount} sendToUser={sendToUser} burnToken={burnToken}/>
@@ -629,7 +579,7 @@ const Home = () => {
               textAlign={"center"}
             >
               {status == Status.BEFORE_DEPOSITE || status == Status.AFTER_SPIN
-                ? "DEPOSITE NOW"
+                ? "DEPOSIT NOW"
                 : "SPIN NOW"}
             </Typography>
           </Button>

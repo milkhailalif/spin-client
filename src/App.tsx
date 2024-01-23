@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
-import { clusterApiUrl } from "@solana/web3.js";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+
 import {
   LedgerWalletAdapter,
   PhantomWalletAdapter,
@@ -28,8 +27,10 @@ function App() {
   const [balance, setBalance] = useState<number>(0);
   const [status, mappingStatusTo] = useState<Status>(Status.BEFORE_DEPOSITE);
   const [prizeNumber, setPrizeNumber] = useState<number>(0);
-  const solNetwork = WalletAdapterNetwork.Devnet;
-  const endpoint = useMemo(() => clusterApiUrl(solNetwork), [solNetwork]);
+  // const solNetwork = WalletAdapterNetwork.Mainnet;
+  const solNetwork = "https://marginal-shanna-fast-mainnet.helius-rpc.com/";
+  // const endpoint = useMemo(() => clusterApiUrl(solNetwork), [solNetwork]);
+  const endpoint = "https://marginal-shanna-fast-mainnet.helius-rpc.com/";
   /**
    * initialize all the wallets you want to use
    */
