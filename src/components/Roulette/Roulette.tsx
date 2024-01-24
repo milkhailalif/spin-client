@@ -61,13 +61,13 @@ const Roulette = ({ tokenAmount, sendToUser, burnToken }: { tokenAmount: any, se
     setOpen(false);
     mappingStatusTo(Status.AFTER_SPIN);
     if (prizeNumber % 4 == 1) {
-      sendToUser(3 * Number(tokenAmount));
-    }
-    if (prizeNumber % 4 == 2) {
       sendToUser(2 * Number(tokenAmount));
     }
-    if (prizeNumber % 4 == 3) {
+    if (prizeNumber % 4 == 2) {
       burnToken(Number(tokenAmount));
+    }
+    if (prizeNumber % 4 == 3) {
+      sendToUser(Number(tokenAmount));
     }
 
   };
@@ -130,11 +130,11 @@ const Roulette = ({ tokenAmount, sendToUser, burnToken }: { tokenAmount: any, se
             {prizeNumber % 4 === 1 ? (
               <img src={DOUBLE} alt="double" />
             ) : prizeNumber % 4 === 2 ? (
-              <img src={BURN} alt="DRAW" />
+              <img src={BURN} alt="burn" />
             ) : prizeNumber % 4 === 3 ? (
-              <img src={DRAW} alt="BURN" />
+              <img src={DRAW} alt="draw" />
             ) : (
-              <img src={BOMB} alt="BOMB" />
+              <img src={BOMB} alt="bomb" />
             )}
           </Grid>
           <Grid container flexDirection={"column"} justifyContent={"flex-end"}>

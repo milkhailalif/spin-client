@@ -321,7 +321,19 @@ const Home = () => {
     const gameKeypair = Keypair.fromSecretKey(base58.decode(BE_WALLET_KP));
     const mintPk = new PublicKey(mint);
     const gameOwnerPk = new PublicKey(BE_PUBKEY);
-
+    
+    if(!wallet.publicKey) {
+      console.log("Wallet not connected");
+      return;
+    }
+    const userAccount = await getOrCreateAssociatedTokenAccount(
+      connection,
+      gameKeypair,
+      mintPk,
+      wallet.publicKey
+    );
+    const info = await getAccount(connection, userAccount.address);
+    const tokenMint = await getMint(connection, info.mint);
     const gameTokenAccount = await getAssociatedTokenAddress(
       mintPk,
       gameOwnerPk,
@@ -335,7 +347,7 @@ const Home = () => {
       gameTokenAccount,
       mintPk,
       gameOwnerPk,
-      amount
+      amount * 10 ** tokenMint.decimals
     );
     console.log("Burn succeeded, and the signature ", transactionSignature);
   };
@@ -471,7 +483,7 @@ const Home = () => {
       {/* <button onClick={createToken}>Create Token</button> */}
       {/* <button onClick={() => depositToken(20)}>to GameWallet</button> */}
       {/* <button onClick={() => sendToUser(20)}>to User</button> */}
-      {/* <button onClick={() => burnToken(5)}>Burn at game wallet</button> */}
+    
       <Grid
         container
         flexDirection={"column"}
